@@ -1,0 +1,111 @@
+swagger: '2.0'
+info:
+  description: Service MediaHandler
+  version: 1.0.0
+  title: MediaHandler
+basePath: /media_handler/v1
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /media:
+    post:
+      summary: Saving media
+      description: Saving media info
+      operationId: saveMediaInfo
+      tags:
+        - media
+      parameters:
+        - in: body
+          name: body
+          schema:
+            $ref: '#/definitions/QueryParamsForSavingMedia'
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: integer
+        '400':
+          description: |-
+            Bad Request
+            - Same id can contain only the same type and uri:
+               error.code = 'duplicateId'
+          schema:
+            $ref: '#/definitions/Error'
+        '500':
+          description: Internal Server Error
+    get:
+      summary: Returns media information by id
+      description: Returns media information (JSON) by id
+      operationId: getMediaInfo
+      tags:
+        - media
+      parameters:
+        - in: path
+          name: id
+          type: string
+          required: true
+          description: Id media
+      responses:
+        '200':
+          description: successful operation
+          schema:
+            type: integer
+            $ref: '#/definitions/MediaInfo'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not found
+        '500':
+          description: Internal Server Error
+definitions:
+  QueryParamsForSavingMedia:
+    description: Post request /media parameters
+    required:
+      - id
+    properties:
+      id:
+        type: string
+        description: Identifier media
+      type:
+        type: string
+        description: Type of media
+        $ref: '#/definitions/MediaTypeEnum'
+      url:
+        type: string
+        description: Media url
+# TODO: implement after structure refinement
+  MediaInfo:
+    description: information about the url of the video and its duration
+    required:
+      - id
+    properties:
+      id:
+        type: string
+        description: Identifier media
+      type:
+        type: string
+        description: Type of media
+        $ref: '#/definitions/MediaTypeEnum'
+      url:
+        type: string
+        description: Media url
+      duration:
+        type: integer
+        description: Video duration
+  MediaTypeEnum:
+    type: string
+    enum:
+      - IMAGE
+      - VIDEO
+  Error:
+    properties:
+      code:
+        description: Код ошибки
+        type: string
+      message:
+        description: Сообщение об ошибке
+        type: string

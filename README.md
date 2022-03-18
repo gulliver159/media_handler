@@ -1,6 +1,6 @@
 # media_handler
 
-There are "media" (id, type, uri) and "media_video" (id, duration) t*ables in the database (you may add tables/columns).
+There are "media" (id, type, uri) and "media_video" (id, duration) tables in the database (you may add tables/columns).
 
 There is a singleton service* VideoDurationCalculationService with 1 method "calc" in the spring boot app. 
 
@@ -17,7 +17,7 @@ The endpoint saves all valid information into table "media".
 If the type is VIDEO and URL is not nullable and "media_video" doesn't contain information about this media id, then
 - endpoint returns immediately
 - duration should be calculated in the background and saved into the "media_video" table.
-- 
+
 Assume that repeated duplicate queries (all 3 fields are the same) are possible.
 
 Assume that the same id can contain only the same type and uri
