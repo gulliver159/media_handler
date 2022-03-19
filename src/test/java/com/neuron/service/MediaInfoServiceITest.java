@@ -1,32 +1,19 @@
 package com.neuron.service;
 
-import com.neuron.Application;
-import com.neuron.dao.MediaInfoDao;
 import io.swagger.model.MediaInfo;
 import io.swagger.model.MediaTypeEnum;
 import io.swagger.model.QueryParamsForSavingMedia;
 import io.swagger.model.VideoTypeEnum;
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest(classes = Application.class)
-@RunWith(SpringJUnit4ClassRunner.class)
-@ActiveProfiles({"unitTest", "local"})
-public class MediaInfoServiceITest {
+public class MediaInfoServiceITest extends AbstractServiceTest {
 
-    private static final String MEDIA_ID = "id";
-    private static final String MEDIA_URL = "url";
-    private static final Integer MEDIA_DURATION = 30;
     private static final Integer INSERTS_NUMBER_ALREADY_EXISTED = 0;
     private static final Integer INSERTS_NUMBER_NOT_EXISTED = 1;
 
@@ -36,25 +23,11 @@ public class MediaInfoServiceITest {
     @MockBean
     VideoInfoService videoInfoService;
 
-    @MockBean
-    MediaInfoDao mediaInfoDao;
-
-    @Before
-    public void before() {
-        MediaInfo mediaInfo = new MediaInfo();
-        mediaInfo.setId("qwe");
-        when(mediaInfoDao.getMedia(any())).thenReturn(mediaInfo);
-    }
-
     @Test
     public void saveMediaInfoNotExistedVideo() {
         when(mediaInfoDao.saveMedia(any())).thenReturn(INSERTS_NUMBER_NOT_EXISTED);
 
-        QueryParamsForSavingMedia queryParams = new QueryParamsForSavingMedia();
-        queryParams.setId(MEDIA_ID);
-        queryParams.setType(MediaTypeEnum.VIDEO);
-        queryParams.setUrl(MEDIA_URL);
-
+        QueryParamsForSavingMedia queryParams = queryParams(MediaTypeEnum.VIDEO, MEDIA_URL);
         mediaInfoService.saveMediaInfo(queryParams);
 
         verify(mediaInfoDao).saveMedia(queryParams);
@@ -65,11 +38,7 @@ public class MediaInfoServiceITest {
     public void saveMediaInfoAlreadyExistedVideo() {
         when(mediaInfoDao.saveMedia(any())).thenReturn(INSERTS_NUMBER_ALREADY_EXISTED);
 
-        QueryParamsForSavingMedia queryParams = new QueryParamsForSavingMedia();
-        queryParams.setId(MEDIA_ID);
-        queryParams.setType(MediaTypeEnum.VIDEO);
-        queryParams.setUrl(MEDIA_URL);
-
+        QueryParamsForSavingMedia queryParams = queryParams(MediaTypeEnum.VIDEO, MEDIA_URL);
         mediaInfoService.saveMediaInfo(queryParams);
 
         verify(mediaInfoDao).saveMedia(queryParams);
@@ -80,11 +49,7 @@ public class MediaInfoServiceITest {
     public void saveMediaInfoNotExistedNotVideo() {
         when(mediaInfoDao.saveMedia(any())).thenReturn(INSERTS_NUMBER_NOT_EXISTED);
 
-        QueryParamsForSavingMedia queryParams = new QueryParamsForSavingMedia();
-        queryParams.setId(MEDIA_ID);
-        queryParams.setType(MediaTypeEnum.IMAGE);
-        queryParams.setUrl(MEDIA_URL);
-
+        QueryParamsForSavingMedia queryParams = queryParams(MediaTypeEnum.IMAGE, MEDIA_URL);
         mediaInfoService.saveMediaInfo(queryParams);
 
         verify(mediaInfoDao).saveMedia(queryParams);
@@ -95,10 +60,7 @@ public class MediaInfoServiceITest {
     public void saveMediaInfoAlreadyExistedEmptyUrl() {
         when(mediaInfoDao.saveMedia(any())).thenReturn(INSERTS_NUMBER_NOT_EXISTED);
 
-        QueryParamsForSavingMedia queryParams = new QueryParamsForSavingMedia();
-        queryParams.setId(MEDIA_ID);
-        queryParams.setType(MediaTypeEnum.VIDEO);
-
+        QueryParamsForSavingMedia queryParams = queryParams(MediaTypeEnum.VIDEO, null);
         mediaInfoService.saveMediaInfo(queryParams);
 
         verify(mediaInfoDao).saveMedia(queryParams);
