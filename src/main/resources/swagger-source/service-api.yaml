@@ -77,7 +77,6 @@ definitions:
       url:
         type: string
         description: Media url
-# TODO: implement after structure refinement
   MediaInfo:
     description: information about the url of the video and its duration
     required:
@@ -90,6 +89,10 @@ definitions:
         type: string
         description: Type of media
         $ref: '#/definitions/MediaTypeEnum'
+      typeVideo:
+        type: string
+        description: The type of video depends on the availability of the url and the calculated duration
+        $ref: '#/definitions/VideoTypeEnum'
       url:
         type: string
         description: Media url
@@ -101,6 +104,12 @@ definitions:
     enum:
       - IMAGE
       - VIDEO
+  VideoTypeEnum:
+    type: string
+    enum:
+      - VIDEO_WITH_DURATION
+      - VIDEO_WITHOUT_URL
+      - VIDEO_WITHOUT_DURATION_YET
   Error:
     properties:
       code:
