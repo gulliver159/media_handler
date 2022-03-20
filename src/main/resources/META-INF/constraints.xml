@@ -1,0 +1,26 @@
+<constraint-mappings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                     xsi:schemaLocation="http://jboss.org/xml/ns/javax/validation/mapping validation-mapping-1.0.xsd"
+                     xmlns="http://jboss.org/xml/ns/javax/validation/mapping">
+    
+    <bean class="io.swagger.model.QueryParamsForSavingMedia" ignore-annotations="true">
+        <field name="id">
+            <constraint annotation="javax.validation.constraints.NotNull"/>
+            <constraint annotation="javax.validation.constraints.Size">
+                <element name="min">36</element>
+                <element name="max">36</element>
+            </constraint>
+        </field>
+        <field name="type">
+            <constraint annotation="javax.validation.constraints.NotNull">
+                <message>field value must be from enumeration</message>
+            </constraint>
+        </field>
+        <field name="url">
+            <constraint annotation="javax.validation.constraints.Size">
+                <element name="max">255</element>
+            </constraint>
+        </field>
+    </bean>
+    
+
+</constraint-mappings>

@@ -33,12 +33,13 @@ public class MediaInfoDaoImpl implements MediaInfoDao {
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
     public static final RowMapper<MediaInfo> ROW_MAPPER = (ResultSet rs, int rowNum) -> {
+        MediaInfo mediaInfo = new MediaInfo();
+        mediaInfo.setId(rs.getString("ID"));
+        mediaInfo.setType(MediaTypeEnum.fromValue(rs.getString("TYPE")));
+        mediaInfo.setUrl(rs.getString("URL"));
         int duration = rs.getInt("DURATION");
-        return new MediaInfo()
-                .id(rs.getString("ID"))
-                .type(MediaTypeEnum.fromValue(rs.getString("TYPE")))
-                .url(rs.getString("URL"))
-                .duration(rs.wasNull() ? null : duration);
+        mediaInfo.setDuration(rs.wasNull() ? null : duration);
+        return mediaInfo;
     };
 
     @Override

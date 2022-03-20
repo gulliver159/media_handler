@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/media_handler/v1")
@@ -21,7 +23,7 @@ public class MediaController {
     private final MediaInfoService mediaInfoService;
 
     @PostMapping(value = "/media", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void saveMediaInfo(@RequestBody QueryParamsForSavingMedia queryParams) throws ServerException {
+    public void saveMediaInfo(@RequestBody @Valid QueryParamsForSavingMedia queryParams) throws ServerException {
         mediaInfoService.saveMediaInfo(queryParams);
     }
 
