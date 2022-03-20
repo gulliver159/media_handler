@@ -1,6 +1,7 @@
 package com.neuron.service.impl;
 
 import com.neuron.dao.MediaInfoDao;
+import com.neuron.exception.ServerException;
 import com.neuron.service.MediaInfoService;
 import com.neuron.service.VideoInfoService;
 import io.swagger.model.MediaInfo;
@@ -21,7 +22,7 @@ public class MediaInfoServiceImpl implements MediaInfoService {
     private final VideoInfoService videoInfoService;
 
     @Override
-    public void saveMediaInfo(QueryParamsForSavingMedia queryParams) {
+    public void saveMediaInfo(QueryParamsForSavingMedia queryParams) throws ServerException {
         int insertsNumber = mediaInfoDao.saveMedia(queryParams);
         boolean notExisted = insertsNumber == 1;
 
@@ -31,7 +32,7 @@ public class MediaInfoServiceImpl implements MediaInfoService {
     }
 
     @Override
-    public MediaInfo getMediaInfo(String id) {
+    public MediaInfo getMediaInfo(String id) throws ServerException {
         MediaInfo mediaInfo = mediaInfoDao.getMedia(id);
 
         if (!MediaTypeEnum.VIDEO.equals(mediaInfo.getType())) {
