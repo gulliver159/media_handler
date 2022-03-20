@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX full_index ON MEDIA (ID, TYPE, URL);
