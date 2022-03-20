@@ -111,10 +111,27 @@ definitions:
       - VIDEO_WITHOUT_URL
       - VIDEO_WITHOUT_DURATION_YET
   Error:
+    required:
+      - code
     properties:
       code:
         description: Код ошибки
         type: string
       message:
         description: Сообщение об ошибке
+        type: string
+      attrErrors:
+        description: Ошибки бизнес-валидации атрибутов
+        type: array
+        items:
+          $ref: '#/definitions/AttrError'
+  AttrError:
+    required:
+      - attr
+    properties:
+      attr:
+        description: Наименование атрибута
+        type: string
+      message:
+        description: Сообщение об ошибке, возникшей при валидации атрибута
         type: string

@@ -1,5 +1,6 @@
 package com.neuron.service;
 
+import com.neuron.exception.ServerException;
 import io.swagger.model.MediaInfo;
 import io.swagger.model.MediaTypeEnum;
 import io.swagger.model.QueryParamsForSavingMedia;
@@ -8,6 +9,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import static com.neuron.common.MockObjects.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -24,10 +26,10 @@ public class MediaInfoServiceITest extends AbstractServiceTest {
     VideoInfoService videoInfoService;
 
     @Test
-    public void saveMediaInfoNotExistedVideo() {
+    public void saveMediaInfoNotExistedVideo() throws ServerException {
         when(mediaInfoDao.saveMedia(any())).thenReturn(INSERTS_NUMBER_NOT_EXISTED);
 
-        QueryParamsForSavingMedia queryParams = queryParams(MediaTypeEnum.VIDEO, MEDIA_URL);
+        QueryParamsForSavingMedia queryParams = queryParams(MEDIA_ID, MediaTypeEnum.VIDEO, MEDIA_URL);
         mediaInfoService.saveMediaInfo(queryParams);
 
         verify(mediaInfoDao).saveMedia(queryParams);
@@ -35,10 +37,10 @@ public class MediaInfoServiceITest extends AbstractServiceTest {
     }
 
     @Test
-    public void saveMediaInfoAlreadyExistedVideo() {
+    public void saveMediaInfoAlreadyExistedVideo() throws ServerException {
         when(mediaInfoDao.saveMedia(any())).thenReturn(INSERTS_NUMBER_ALREADY_EXISTED);
 
-        QueryParamsForSavingMedia queryParams = queryParams(MediaTypeEnum.VIDEO, MEDIA_URL);
+        QueryParamsForSavingMedia queryParams = queryParams(MEDIA_ID, MediaTypeEnum.VIDEO, MEDIA_URL);
         mediaInfoService.saveMediaInfo(queryParams);
 
         verify(mediaInfoDao).saveMedia(queryParams);
@@ -46,10 +48,10 @@ public class MediaInfoServiceITest extends AbstractServiceTest {
     }
 
     @Test
-    public void saveMediaInfoNotExistedNotVideo() {
+    public void saveMediaInfoNotExistedNotVideo() throws ServerException {
         when(mediaInfoDao.saveMedia(any())).thenReturn(INSERTS_NUMBER_NOT_EXISTED);
 
-        QueryParamsForSavingMedia queryParams = queryParams(MediaTypeEnum.IMAGE, MEDIA_URL);
+        QueryParamsForSavingMedia queryParams = queryParams(MEDIA_ID, MediaTypeEnum.IMAGE, MEDIA_URL);
         mediaInfoService.saveMediaInfo(queryParams);
 
         verify(mediaInfoDao).saveMedia(queryParams);
@@ -57,10 +59,10 @@ public class MediaInfoServiceITest extends AbstractServiceTest {
     }
 
     @Test
-    public void saveMediaInfoAlreadyExistedEmptyUrl() {
+    public void saveMediaInfoAlreadyExistedEmptyUrl() throws ServerException {
         when(mediaInfoDao.saveMedia(any())).thenReturn(INSERTS_NUMBER_NOT_EXISTED);
 
-        QueryParamsForSavingMedia queryParams = queryParams(MediaTypeEnum.VIDEO, null);
+        QueryParamsForSavingMedia queryParams = queryParams(MEDIA_ID, MediaTypeEnum.VIDEO, null);
         mediaInfoService.saveMediaInfo(queryParams);
 
         verify(mediaInfoDao).saveMedia(queryParams);
@@ -68,7 +70,7 @@ public class MediaInfoServiceITest extends AbstractServiceTest {
     }
 
     @Test
-    public void getMediaInfoImage() {
+    public void getMediaInfoImage() throws ServerException {
         mockGetMediaInfo(MediaTypeEnum.IMAGE, MEDIA_URL, MEDIA_DURATION);
 
         MediaInfo mediaInfo = mediaInfoService.getMediaInfo(MEDIA_ID);
@@ -82,7 +84,7 @@ public class MediaInfoServiceITest extends AbstractServiceTest {
     }
 
     @Test
-    public void getMediaInfoWithDuration() {
+    public void getMediaInfoWithDuration() throws ServerException {
         mockGetMediaInfo(MediaTypeEnum.VIDEO, MEDIA_URL, MEDIA_DURATION);
 
         MediaInfo mediaInfo = mediaInfoService.getMediaInfo(MEDIA_ID);
@@ -96,7 +98,7 @@ public class MediaInfoServiceITest extends AbstractServiceTest {
     }
 
     @Test
-    public void getMediaInfoWithoutDuration() {
+    public void getMediaInfoWithoutDuration() throws ServerException {
         mockGetMediaInfo(MediaTypeEnum.VIDEO, MEDIA_URL, null);
 
         MediaInfo mediaInfo = mediaInfoService.getMediaInfo(MEDIA_ID);
@@ -110,7 +112,7 @@ public class MediaInfoServiceITest extends AbstractServiceTest {
     }
 
     @Test
-    public void getMediaInfoWithoutUrl() {
+    public void getMediaInfoWithoutUrl() throws ServerException {
         mockGetMediaInfo(MediaTypeEnum.VIDEO, null, null);
 
         MediaInfo mediaInfo = mediaInfoService.getMediaInfo(MEDIA_ID);
@@ -123,12 +125,12 @@ public class MediaInfoServiceITest extends AbstractServiceTest {
         verify(mediaInfoDao).getMedia(MEDIA_ID);
     }
 
-    private void mockGetMediaInfo(MediaTypeEnum type, String url, Integer duration) {
-        MediaInfo mediaInfoFromDb = new MediaInfo();
-        mediaInfoFromDb.setId(MEDIA_ID);
-        mediaInfoFromDb.setType(type);
-        mediaInfoFromDb.setUrl(url);
-        mediaInfoFromDb.setDuration(duration);
+    private void mockGetMediaInfo(MediaTypeEnum type, String url, Integer duration) throws ServerException {
+        MediaInfo mediaInfoFromDb = new MediaInfo()
+                .id(MEDIA_ID)
+                .type(type)
+                .url(url)
+                .duration(duration);
         when(mediaInfoDao.getMedia(any())).thenReturn(mediaInfoFromDb);
     }
 }

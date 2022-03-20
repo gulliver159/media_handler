@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/changeset/create-media-table.sql
+  - include:
+      file: db/changelog/changeset/create-media-index.sql
+  - include:
+      file: db/changelog/changeset/create-media-video-table.sql
