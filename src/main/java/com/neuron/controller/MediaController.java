@@ -1,5 +1,6 @@
 package com.neuron.controller;
 
+import com.neuron.exception.ServerException;
 import com.neuron.service.MediaInfoService;
 import io.swagger.model.MediaInfo;
 import io.swagger.model.QueryParamsForSavingMedia;
@@ -20,12 +21,12 @@ public class MediaController {
     private final MediaInfoService mediaInfoService;
 
     @PostMapping(value = "/media", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void saveMediaInfo(@RequestBody QueryParamsForSavingMedia queryParams) {
+    public void saveMediaInfo(@RequestBody QueryParamsForSavingMedia queryParams) throws ServerException {
         mediaInfoService.saveMediaInfo(queryParams);
     }
 
     @GetMapping(value = "/media/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public MediaInfo getMediaInfo(@PathVariable("id") String id) {
+    public MediaInfo getMediaInfo(@PathVariable("id") String id) throws ServerException {
         return mediaInfoService.getMediaInfo(id);
     }
 
